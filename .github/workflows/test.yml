@@ -1,1 +1,24 @@
-
+name: Test
+on:
+  pull_request:
+    branches:
+      - main
+ 
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    needs: Train
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+ 
+      - name: Pull Docker image from registry
+        run: docker pull yourdockerhubusername/cicd_assignment:${{ github.sha }}
+ 
+      - name: Run Docker container and test model
+        run: |
+          docker run yourdockerhubusername/cicd_assignment:${{ github.sha }} python test.py
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
