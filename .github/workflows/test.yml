@@ -20,5 +20,5 @@ jobs:
         run: |
           docker run yourdockerhubusername/cicd_assignment:${{ github.sha }} python test.py
         env:
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.Maxout1! }}
+          DOCKER_USERNAME: ${{ secrets.nithinpoovanna }}
