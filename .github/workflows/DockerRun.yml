@@ -16,7 +16,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Pull Docker image
-      run: docker pull nithinpoovanna/nithinpoovannaCICD:latest
+      run: docker pull nithinpoovanna/nithinpoovannacicd:latest
 
     - name: Run Docker image
       run: docker run --name test_container yourusername/yourimagename:latest
