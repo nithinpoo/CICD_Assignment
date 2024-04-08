@@ -1,33 +1,48 @@
-name: Pull and Run Docker Image
-
+name: dockerimage
 on:
   pull_request:
-    branches: 
-      - main
-
+    branches: ['main']
 jobs:
-  pull-and-run:
+  bld_push_img: 
     runs-on: ubuntu-latest
     steps:
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Pull Docker image
-      run: docker pull nithinpoovanna/nithinpoovannacicd
-
-    - name: Run Docker image
-      run: docker run --name test_container yourusername/yourimagename:latest
-
-    - name: Check test score
-      run: |
-        docker logs test_container > output.log
-        SCORE=$(grep -oP 'Score: \K[0-9.]+' output.log)
-        if (( $(echo "$SCORE > 0.50" | bc -l) )); then
-          echo "Test Passed"
-        else
-          echo "Test Failed"
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2 
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: nithinpoovanna/cicdassignment:V3
+  pull_docker_img:
+    runs-on: ubuntu-latest  
+    needs: bld_push_img
+    if: ${{ needs.bld_push_img.result == 'success' }}
+    steps:
+      - name: Pull Docker image
+        run: docker pull nithinpoovanna/cicdassignment:V3
+      - name: Run_Docker 
+        run: |
+          OUTPUT=$(docker run nithinpoovanna/cicdassignment:V3)
+          echo "Score:"
+          echo "$OUTPUT"
+          if [[ `echo "$OUTPUT 0.35" | awk '{print ($1 < $2)}'` == 1 ]]; then echo "Insufficient Accuracy" && exit 1; fi
+          echo "Docker executed Successfully!"
+  fail-job:
+      runs-on: ubuntu-latest  
+      needs: bld_push_img
+      if: ${{ failure() }}
+      steps:
+      - name: fail job
+        run: |
+          echo "job failed"
           exit 1
-        fi
