@@ -14,11 +14,11 @@ jobs:
         uses: actions/checkout@v2
  
       - name: Pull Docker image from registry
-        run: docker pull yourdockerhubusername/cicd_assignment:${{ github.sha }}
+        run: docker pull nithinpoovanna/cicdassignment:${{ github.sha }}
  
       - name: Run Docker container and test model
         run: |
-          docker run yourdockerhubusername/cicd_assignment:${{ github.sha }} python test.py
+          docker run nithinpoovanna/cicdassignment:${{ github.sha }} python test.py
         env:
-          DOCKER_PASSWORD: ${{ secrets.Maxout1! }}
-          DOCKER_USERNAME: ${{ secrets.nithinpoovanna }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PWD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_UN }}
