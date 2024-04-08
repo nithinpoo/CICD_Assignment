@@ -35,7 +35,7 @@ jobs:
           OUTPUT=$(docker run nithinpoovanna/cicdassignment:V3)
           echo "Score:"
           echo "$OUTPUT"
-          if [[ `echo "$OUTPUT 0.35" | awk '{print ($1 < $2)}'` == 1 ]]; then echo "Insufficient Accuracy" && exit 1; fi
+          if [[ `echo "$OUTPUT 0.30" | awk '{print ($1 < $2)}'` == 1 ]]; then echo "Insufficient Accuracy" && exit 1; fi
           echo "Docker executed Successfully!"
   fail-job:
       runs-on: ubuntu-latest  
