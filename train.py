@@ -4,7 +4,7 @@ import pickle
 import numpy as np
 
 
-df = pd.read_csv("dataa/train.csv") 
+df = pd.read_csv("dataaaaqa/train.csv") 
 X = df.drop(columns=['Disease']).to_numpy()
 y = df['Disease'].to_numpy()
 labels = np.sort(np.unique(y))
@@ -23,4 +23,4 @@ try:
     with open("non_existent_file.pkl", 'rb') as f:
         model = pickle.load(f)
 except FileNotFoundError:
-    print("Error: The model file does not exist.")
+    print("Error: The file does not exist.")
